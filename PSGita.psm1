@@ -120,3 +120,28 @@ function Get-PSGitaVerse
         return $resp
     }
 }
+
+Function Get-PSGitaRandomVerse
+{
+    [CmdletBinding()]
+    param
+    (
+        [Parameter(Mandatory = $true)]
+        [String]
+        $GitaToken
+    )
+
+    $randomChapter = Get-Random -InputObject (1..18)
+    $chapter = Get-PSGitaChapter -Chapter $randomChapter -GitaToken $GitaToken
+
+    $randomVerse = Get-PSGitaVerse -Chapter $randomChapter -Verse (Get-Random -Maximum $chapter.verses_count) -GitaToken $GitaToken
+
+    if (!$randomVerse)
+    {
+        throw 'Error retrieving a random verse!'
+    }
+    else
+    {
+        return $randomVerse    
+    }
+}
